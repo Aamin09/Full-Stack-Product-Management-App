@@ -1,0 +1,60 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8 col-sm-10">
+      <div class="card shadow-lg border-0 rounded-3">
+        <div class="card-header bg-primary text-white text-center">
+          <h3 class="mb-0">Add Category</h3>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="onSubmit()" #categoryForm="ngForm">
+            <!-- Category Name Field -->
+            <div class="mb-3">
+              <label for="categoryName" class="form-label fw-bold">Category Name</label>
+              <input
+                type="text"
+                id="categoryName"
+                [(ngModel)]="category.categoryName"
+                name="categoryName"
+                class="form-control shadow-sm"
+                placeholder="Enter category name"
+                required
+                #categoryName="ngModel"
+              />
+              <div *ngIf="categoryName.invalid && categoryName.touched" class="text-danger">
+                Category name is required.
+              </div>
+            </div>
+
+            <!-- Description Field -->
+            <div class="mb-3">
+              <label for="description" class="form-label fw-bold">Description</label>
+              <textarea
+                id="description"
+                [(ngModel)]="category.description"
+                name="description"
+                class="form-control shadow-sm"
+                rows="4"
+                placeholder="Enter category description"
+                required
+                #description="ngModel"
+              ></textarea>
+              <div *ngIf="description.invalid && description.touched" class="text-danger">
+                Description is required.
+              </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex flex-column flex-md-row justify-content-between mt-4">
+              <button type="submit" class="btn btn-primary btn-lg mb-3 mb-md-0" [disabled]="categoryForm.invalid">
+                <i class="bi bi-save"></i> Save
+              </button>
+              <a routerLink="/categories" class="btn btn-secondary btn-lg">
+                <i class="bi bi-x-circle"></i> Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

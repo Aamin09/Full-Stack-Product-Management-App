@@ -1,0 +1,108 @@
+<div class="container mt-5">
+  <!-- Card with header background -->
+  <div class="card shadow-lg rounded border-light p-2">
+    <div class="card-header bg-info text-white text-center py-2 rounded-top">
+      <h2>Upload Product Image</h2>
+    </div>
+<br>
+    <form [formGroup]="addImageForm" (ngSubmit)="uploadImage()">
+      <!-- Category Dropdown -->
+      <div class="mb-3">
+        <label for="categoryId" class="form-label fw-bold">Select Category</label>
+        <select
+          id="categoryId"
+          formControlName="categoryId"
+          class="form-select shadow-sm"
+          (change)="onCategoryChange()"
+        >
+          <option value="" disabled>Select a category</option>
+          <option *ngFor="let category of categories" [value]="category.categoryId">
+            {{ category.categoryName }}
+          </option>
+        </select>
+        <div
+          *ngIf="addImageForm.get('categoryId')?.invalid && addImageForm.get('categoryId')?.touched"
+          class="text-danger"
+        >
+          Please select a category.
+        </div>
+      </div>
+
+      <!-- Product Dropdown -->
+      <div class="mb-3">
+        <label for="productId" class="form-label fw-bold">Select Product</label>
+        <select
+          id="productId"
+          formControlName="productId"
+          class="form-select shadow-sm"
+          [disabled]="!addImageForm.get('categoryId')?.value || isLoadingProducts"
+        >
+          <option value="" disabled>Select a product</option>
+          <option *ngFor="let product of products" [value]="product.productId">
+            {{ product.productName }}
+          </option>
+        </select>
+        <div *ngIf="isLoadingProducts" class="text-info mt-2">Loading products...</div>
+        <div
+          *ngIf="addImageForm.get('productId')?.invalid && addImageForm.get('productId')?.touched"
+          class="text-danger"
+        >
+          Please select a product.
+        </div>
+      </div>
+
+      <!-- Image Name -->
+      <div class="mb-3">
+        <label for="imageName" class="form-label fw-bold">Image Name</label>
+        <input
+          type="text"
+          id="imageName"
+          formControlName="imageName"
+          class="form-control shadow-sm"
+        />
+        <div
+          *ngIf="addImageForm.get('imageName')?.invalid && addImageForm.get('imageName')?.touched"
+          class="text-danger"
+        >
+          Please provide an image name.
+        </div>
+      </div>
+
+      <!-- File Input -->
+      <div class="mb-3">
+        <label for="file" class="form-label fw-bold">Select Image File</label>
+        <input
+          type="file"
+          id="file"
+          (change)="onFileChange($event)"
+          class="form-control shadow-sm"
+          formControlName="file"
+        />
+        <div
+          *ngIf="addImageForm.get('file')?.invalid && addImageForm.get('file')?.touched"
+          class="text-danger"
+        >
+          Please select a file to upload.
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="d-flex justify-content-between mb-3">
+        <button
+          type="submit"
+          class="btn btn-success px-4 py-2"
+          [disabled]="addImageForm.invalid || isLoadingProducts"
+        >
+        <i class="bi bi-save"></i> Upload Image
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary px-4 py-2"
+          (click)="goBack()"
+        >
+        <i class="bi bi-arrow-left-circle"></i> Back
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

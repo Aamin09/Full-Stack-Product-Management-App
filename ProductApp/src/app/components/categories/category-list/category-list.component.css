@@ -1,0 +1,124 @@
+/* General table styles */
+.table-responsive {
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Header */
+thead.bg-primary th {
+  background-color: #0d6efd !important; /* Dark primary color */
+  color: #fff;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 12px;
+}
+
+/* Row hover effect */
+tr:hover {
+  background-color: #f0f8ff; /* Light blue background on hover */
+  transition: background-color 0.3s ease;
+}
+
+/* Button styles with subtle hover effect */
+button {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Remove Tooltip Styling */
+#hover-tooltip {
+  display: none; /* Disable the tooltip */
+}
+
+/* Styling for Tooltip */
+#hover-tooltip {
+  position: absolute;
+  z-index: 9999;
+  padding: 8px;
+  border-radius: 5px;
+  max-width: 200px;
+  white-space: nowrap;
+}
+
+/* Container fade-in animation */
+.container {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 767px) {
+  .table-responsive {
+    margin-bottom: 15px;
+  }
+
+  .table th, .table td {
+    padding: 8px !important; /* Adjust padding for smaller screens */
+  }
+
+  /* Stack buttons on mobile */
+  button {
+    width: 100%; /* Make buttons full width */
+    margin-bottom: 5px;
+  }
+
+  /* Adjust typography for small screens */
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .text-muted {
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1000px) {
+  .d-flex {
+    flex-direction: column; /* Stack buttons vertically on medium screens */
+    align-items: stretch; /* Ensure buttons take up full width */
+  }
+
+  button {
+    width: 100%; /* Full width buttons */
+    margin-bottom: 10px; /* Add space between buttons */
+  }
+
+  /* Center the 'Add New Category' button and move to a new line */
+  .d-flex > a {
+    align-self: center; /* Center the 'Add New Category' button */
+    margin-bottom: 20px; /* Add space below the button */
+  }
+}
+
+@media (max-width: 575px) {
+  .d-flex {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn {
+    width: 100%; /* Full width buttons on smaller screens */
+  }
+
+  .table-responsive {
+    overflow-x: auto; /* Enable horizontal scrolling on very small screens */
+  }
+}

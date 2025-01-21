@@ -1,0 +1,137 @@
+/* Card Header Background */
+.card-header {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    color: white;
+    padding: 2rem 0;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  /* Typography for card header */
+  .card-header h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+ 
+  /* Animation for fade-in */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Image Container */
+.image-container {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  /* Styled Image */
+  .image-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 3px solid #ddd;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+  
+  /* Hover Effect */
+  .image-container img:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Responsive Image */
+  @media (max-width: 768px) {
+    .image-container img {
+      max-width: 80%;
+    }
+  }
+  
+  .card {
+    animation: fadeIn 0.8s ease-in-out;
+    -webkit-animation: fadeIn 0.8s ease-in-out;
+  }
+  
+  /* Shadow on focus for input and textarea */
+  input:focus,
+  textarea:focus,
+  select:focus {
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    outline: none;
+  }
+  
+  /* Hover effect for buttons */
+  button:hover,
+  a:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 767px) {
+    .container {
+      padding: 0 15px;
+    }
+  
+    .card {
+      margin-top: 20px;
+    }
+  
+    .form-label {
+      font-size: 1rem;
+    }
+  
+    .form-select,
+    .form-control {
+      padding: 0.8rem;
+    }
+  
+    h2 {
+      font-size: 1.5rem;
+    }
+  
+    button {
+      width: 100%;
+      padding: 10px;
+    }
+  
+    .mb-3 {
+      margin-bottom: 1.5rem;
+    }
+  
+    /* Ensure buttons stack with gap on small screens */
+    .d-flex {
+      gap: 15px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .container {
+      padding: 0 10px;
+    }
+  
+    .form-label {
+      font-size: 0.9rem;
+    }
+  
+    .form-select,
+    .form-control {
+      font-size: 1rem;
+      padding: 0.75rem;
+    }
+  
+    button {
+      font-size: 1rem;
+      padding: 12px;
+    }
+  }
+  

@@ -1,0 +1,90 @@
+/* Dark Gradient Footer*/
+.bg-gradient-footer {
+    background: linear-gradient(90deg, #007bff, #00c6ff); /* Dark blue to light blue gradient */
+  }
+  
+  /* Footer Title */
+  .footer-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    color: #f1f1f1; /* Soft white */
+  }
+  
+  /* Footer Paragraph */
+  footer p {
+    font-size: 0.9rem;
+    color: #e0e0e0;
+    line-height: 1.5;
+  }
+  
+  /* Social Media Icons */
+  .social-icons a {
+    font-size: 1.5rem;
+    color: #ffffff;
+    transition: color 0.3s ease;
+  }
+  
+  .social-icons a:hover {
+    color: #ffd700; /* Gold color on hover */
+  }
+  
+  /* Quick Links */
+  ul.list-unstyled {
+    padding-left: 0;
+  }
+  
+  ul.list-unstyled li {
+    margin-bottom: 10px;
+  }
+  
+  ul.list-unstyled li a {
+    color: #ffffff;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  ul.list-unstyled li a:hover {
+    color: #ffd700; /* Gold color on hover */
+  }
+  
+  /* Footer Bottom Section */
+  footer .row.mt-3 p {
+    font-size: 0.8rem;
+    color: #e0e0e0;
+  }
+  
+  /* Footer animation */
+  @keyframes fadeInFooter {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  footer {
+    animation: fadeInFooter 0.5s ease-out;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 767px) {
+    .footer-title {
+      text-align: center;
+    }
+  
+    .social-icons {
+      text-align: center;
+    }
+  
+    .social-icons a {
+      margin-bottom: 10px;
+    }
+  }
+  

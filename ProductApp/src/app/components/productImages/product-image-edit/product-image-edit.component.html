@@ -1,0 +1,88 @@
+<div class="container mt-5">
+    <!-- Card with header background -->
+    <div class="card shadow-lg rounded border-light p-2">
+      <div class="card-header bg-primary text-white text-center py-2 rounded-top">
+        <h2>Edit Product Image</h2>
+      </div>
+  <br>
+      <form [formGroup]="editImageForm" (ngSubmit)="updateImage()">
+        <!-- Category Dropdown -->
+        <div class="mb-3">
+          <label for="categoryId" class="form-label fw-bold">Select Category</label>
+          <select
+            id="categoryId"
+            formControlName="categoryId"
+            class="form-select shadow-sm"
+            (change)="onCategoryChange()"
+          >
+            <option value="" disabled>Select a category</option>
+            <option *ngFor="let category of categories" [value]="category.categoryId">
+              {{ category.categoryName }}
+            </option>
+          </select>
+          <div *ngIf="editImageForm.get('categoryId')?.invalid && editImageForm.get('categoryId')?.touched" class="text-danger">
+            Please select a category.
+          </div>
+        </div>
+  
+        <!-- Product Dropdown -->
+        <div class="mb-3">
+          <label for="productId" class="form-label fw-bold">Select Product</label>
+          <select
+            id="productId"
+            formControlName="productId"
+            class="form-select shadow-sm"
+            [disabled]="!editImageForm.get('categoryId')?.value || isLoadingProducts"
+          >
+            <option value="" disabled>Select a product</option>
+            <option *ngFor="let product of products" [value]="product.productId">
+              {{ product.productName }}
+            </option>
+          </select>
+          <div *ngIf="isLoadingProducts" class="text-info mt-2">Loading products...</div>
+          <div *ngIf="editImageForm.get('productId')?.invalid && editImageForm.get('productId')?.touched" class="text-danger">
+            Please select a product.
+          </div>
+        </div>
+  
+        <!-- Image Name -->
+        <div class="mb-3">
+          <label for="imageName" class="form-label fw-bold">Image Name</label>
+          <input
+            type="text"
+            id="imageName"
+            formControlName="imageName"
+            class="form-control shadow-sm"
+          />
+          <div *ngIf="editImageForm.get('imageName')?.invalid && editImageForm.get('imageName')?.touched" class="text-danger">
+            Image name is required.
+          </div>
+        </div>
+  
+        <!-- Display Current Image -->
+        <div class="mb-3" *ngIf="imagePath">
+          <label class="form-label fw-bold">Current Image</label>
+          <div class="image-container">
+            <img
+              [src]="'https://localhost:7271' + imagePath"
+              alt="Current Image"
+              class="img-fluid rounded shadow-lg border"
+            />
+          </div>
+        </div>
+  
+        <!-- Image File -->
+        <div class="mb-3">
+          <label for="file" class="form-label fw-bold">Choose New Image (optional)</label>
+          <input type="file" id="file" (change)="onFileChange($event)" class="form-control shadow-sm" />
+        </div>
+  
+        <!-- Submit and Back Buttons -->
+        <div class="d-flex flex-column flex-sm-row justify-content-between mb-3 gap-3">
+          <button type="submit" class="btn btn-success px-4 py-2"><i class="bi bi-save"></i> Save Changes</button>
+          <button type="button" class="btn btn-secondary px-4 py-2" (click)="goBack()"><i class="bi bi-arrow-left-circle"></i> Back</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

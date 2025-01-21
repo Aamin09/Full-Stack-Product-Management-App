@@ -1,0 +1,55 @@
+<div class="container mt-5">
+    <div class="card shadow-lg rounded border-light p-3 animate-card">
+      <div class="card-header bg-info text-white text-center py-2 rounded-top">
+        <h2>Product Image Details</h2>
+      </div>
+  
+      <div class="card-body">
+        <!-- Loading Spinner -->
+        <div *ngIf="isLoading" class="text-center text-info">Loading...</div>
+  
+        <!-- Product Image Details Display -->
+        <div *ngIf="!isLoading && productImage" class="product-details">
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <td><strong>Product Name:</strong></td>
+                <td>{{ productName }}</td>
+              </tr>
+              <tr>
+                <td><strong>Category Name:</strong></td>
+                <td>{{ categoryName }}</td>
+              </tr>
+              <tr>
+                <td><strong>Image Name:</strong></td>
+                <td>{{ productImage.imageName }}</td>
+              </tr>
+              <tr>
+                <td><strong>Uploaded Date:</strong></td>
+                <td>{{ productImage.uploadedDate | date: 'short' }}</td>
+              </tr>
+              <tr>
+                <td><strong>Image:</strong></td>
+                <td>
+                  <img [src]="'https://localhost:7271'+productImage.imagePath" alt="Product Image" class="img-fluid rounded shadow-sm" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+  
+        <!-- Error Message if no data is available -->
+        <div *ngIf="!isLoading && !productImage" class="text-center text-danger">
+          No product image details available.
+        </div>
+  
+        <!-- Back Button -->
+        <div class="text-center mt-4">
+          <a routerLink="/product-images" class="btn btn-secondary btn-lg animate-btn">
+            <i class="bi bi-arrow-left-circle"></i> Back
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  

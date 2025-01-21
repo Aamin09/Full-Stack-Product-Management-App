@@ -1,0 +1,90 @@
+/* Smooth card animation on load */
+.card {
+    animation: fadeIn 0.6s ease-in-out;
+  }
+  
+  /* Fade-in animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Highlight rows on hover */
+  .table-hover tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Table header style */
+  th {
+    font-size: 1.1rem;
+  }
+  
+  /* Button hover effect */
+  .btn:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 767px) {
+    .card {
+      margin-top: 20px;
+    }
+  
+    .col-lg-6, .col-md-8, .col-sm-12 {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+  
+    /* Adjust typography for small screens */
+    h3 {
+      font-size: 1.75rem;
+    }
+  
+    .table th, .table td {
+      font-size: 1rem;
+    }
+  
+    /* Margin adjustments for smaller screens */
+    .mt-4 {
+      margin-top: 20px;
+    }
+  
+    /* Adjust button size for smaller screens */
+    .btn-lg {
+      padding: 12px 20px;
+      font-size: 1rem;
+    }
+  
+    /* Reduce table padding for small screens */
+    .table td, .table th {
+      padding: 8px;
+    }
+  }
+  
+  @media (max-width: 575px) {
+    .card-header {
+      font-size: 1.5rem; /* Adjust title size for small screens */
+    }
+  
+    .table td, .table th {
+      font-size: 0.9rem;
+    }
+  
+    .btn-lg {
+      padding: 10px 15px;
+      font-size: 1rem;
+    }
+  
+    .mb-0 {
+      font-size: 1rem;
+    }
+  }
+  

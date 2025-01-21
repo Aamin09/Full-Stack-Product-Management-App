@@ -1,0 +1,48 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-8 col-sm-12">
+      <div class="card shadow-lg border-0 rounded-3">
+        <div class="card-header bg-success text-white text-center">
+          <h3 class="mb-0">Product Details</h3>
+        </div>
+        <div class="card-body">
+          <!-- Table to Display Product Details -->
+          <table class="table table-hover table-bordered align-middle">
+            <tbody>
+              <tr>
+                <th class="bg-light text-success fw-bold">ID</th>
+                <td>{{ product?.productId }}</td>
+              </tr>
+              <tr>
+                <th class="bg-light text-success fw-bold">Name</th>
+                <td>{{ product?.productName }}</td>
+              </tr>
+              <tr>
+                <th class="bg-light text-success fw-bold">Description</th>
+                <td>{{ product?.description }}</td>
+              </tr>
+              <tr>
+                <th class="bg-light text-success fw-bold">Category</th>
+                <td>{{ categoryName }}</td>
+              </tr>
+              <tr>
+                <th class="bg-light text-success fw-bold">Price</th>
+                <td>{{ product?.price | currency }}</td>
+              </tr>
+              <tr>
+                <th class="bg-light text-success fw-bold">Stock Quantity</th>
+                <td>{{ product?.stockQuantity }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- Back Button -->
+          <div class="text-center mt-4">
+            <a routerLink="/products" class="btn btn-secondary btn-lg">
+              <i class="bi bi-arrow-left-circle"></i> Back
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
