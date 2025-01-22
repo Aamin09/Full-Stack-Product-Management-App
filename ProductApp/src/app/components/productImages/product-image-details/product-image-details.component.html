@@ -31,7 +31,9 @@
               <tr>
                 <td><strong>Image:</strong></td>
                 <td>
-                  <img [src]="'https://localhost:7271'+productImage.imagePath" alt="Product Image" class="img-fluid rounded shadow-sm" />
+                  <div class="image-container">
+                    <img [src]="'https://localhost:7271'+productImage.imagePath" alt="Product Image" class="img-fluid rounded shadow-lg border" />
+                  </div>
                 </td>
               </tr>
             </tbody>

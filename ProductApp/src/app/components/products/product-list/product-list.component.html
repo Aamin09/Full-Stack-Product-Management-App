@@ -16,7 +16,7 @@
         <tr>
           <th scope="col">#</th>
           <th scope="col">Product Name</th>
-          <th scope="col">Description</th>
+          <th scope="col" class="description-column">Description</th>
           <th scope="col">Price</th>
           <th scope="col">Stock Quantity</th>
           <th scope="col">Actions</th>
@@ -27,7 +27,7 @@
           <td class="text-center">{{ product.productId }}</td>
           <td class="text-danger fw-bold">{{ product.productName }}</td>
           <td>{{ product.description }}</td>
-          <td>Rs. {{ product.price }}</td>
+          <td>{{ product.price|currency:'INR'}}</td>
           <td class="text-center">{{ product.stockQuantity }}</td>
           <td class="text-center">
             <button class="btn btn-info btn-sm mx-1 my-1" (click)="viewDetails(product.productId)">

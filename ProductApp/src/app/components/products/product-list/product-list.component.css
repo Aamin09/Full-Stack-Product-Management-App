@@ -10,7 +10,13 @@ thead.bg-danger th {
   background-color: #dc3545 !important; /* Red header color */
   color: #fff;
 }
-
+.description-column {
+  width: 400px; 
+  word-wrap: break-word; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  white-space: nowrap; 
+}
 /* Row hover effect */
 tr:hover {
   background-color: #f9f9f9; /* Subtle background change on hover */
@@ -59,7 +65,10 @@ button:hover {
   .table-responsive {
     margin-bottom: 15px;
   }
-
+  .description-column {
+    white-space: normal; 
+    word-wrap: break-word; 
+  }
   .table th, .table td {
     padding: 8px !important; /* Adjust padding for smaller screens */
   }
@@ -99,6 +108,8 @@ button:hover {
     width: 100%; /* Make buttons full width */
     margin-bottom: 10px; /* Add margin between buttons */
   }
+ 
+  
 }
 
 /* For Small Laptop and Large Tablet Devices (1024px to 1366px) */
@@ -107,7 +118,7 @@ button:hover {
     flex-direction: column; /* Stack buttons one after another */
     align-items: stretch;  /* Stretch buttons to the full width */
   }
-
+ 
   .table-responsive .btn {
     width: 100%; /* Make buttons full width */
     height: 40px; /* Equal height for buttons */
