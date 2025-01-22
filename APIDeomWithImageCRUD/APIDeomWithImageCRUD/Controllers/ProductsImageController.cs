@@ -139,6 +139,7 @@ namespace APIDeomWithImageCRUD.Controllers
                 }
 
                 image.ImagePath = $"/images/{newFileName}";
+                image.UploadedDate= DateTime.Now;
             }
 
             // Update image name
