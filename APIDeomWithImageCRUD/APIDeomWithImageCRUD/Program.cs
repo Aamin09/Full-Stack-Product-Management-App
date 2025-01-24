@@ -137,8 +137,7 @@ using (var scope = app.Services.CreateScope())
 
     if (!await roleManager.RoleExistsAsync("User"))
         await roleManager.CreateAsync(new IdentityRole("User"));
-    // Create admin user
-   
+    
 }
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

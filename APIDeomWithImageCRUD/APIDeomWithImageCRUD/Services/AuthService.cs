@@ -80,18 +80,12 @@ namespace APIDeomWithImageCRUD.Services
 
         public async Task<ResponseDto> LoginAsync(LoginDto model)
         {
-            ApplicationUser user = null;
-            if(!string.IsNullOrEmpty(model.Username))
-            {
-                user=await userManager.FindByNameAsync(model.Username);
-            }
-            if (user == null && !string.IsNullOrEmpty(model.Email)) 
-            {
-                user = await userManager.FindByEmailAsync(model.Email);
-            }
+            var user = await userManager.FindByNameAsync(model.UsernameOrEmail)
+                 ?? await userManager.FindByEmailAsync(model.UsernameOrEmail);
+
 
             if (user == null)
-                return new ResponseDto { IsSuccess = false, Message = "User not found" };
+                return new ResponseDto { IsSuccess = false, Message = "Invalid Username or Email" };
 
             // checking email confirmation
 
@@ -100,7 +94,7 @@ namespace APIDeomWithImageCRUD.Services
 
             var passwordVerification = await userManager.CheckPasswordAsync(user, model.Password);
             if (!passwordVerification)
-                return new ResponseDto { IsSuccess = false, Message = "Invalid login attempt" };
+                return new ResponseDto { IsSuccess = false, Message = "Invalid Password" };
 
             // Another way to verify the password
             //var passwordHasher = new PasswordHasher<ApplicationUser>();
@@ -244,6 +238,7 @@ namespace APIDeomWithImageCRUD.Services
                  new Claim(ClaimTypes.Name,user.UserName),
                  new Claim(ClaimTypes.Email,user.Email),
             };
+
 
             // Add role claims
             claims.AddRange(roles.Select(role=>new Claim(ClaimTypes.Role,role)));
