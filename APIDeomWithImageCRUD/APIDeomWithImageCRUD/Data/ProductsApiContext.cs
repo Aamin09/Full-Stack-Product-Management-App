@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.General;
+using APIDeomWithImageCRUD.Models;
+using Microsoft.AspNetCore.Identity;
 
-namespace APIDeomWithImageCRUD.Models;
+namespace APIDeomWithImageCRUD.Data;
 
-public partial class ProductsApiContext : DbContext
+public partial class ProductsApiContext : IdentityDbContext<ApplicationUser>
 {
     public ProductsApiContext()
     {
@@ -26,6 +30,15 @@ public partial class ProductsApiContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Configure primary keys for Identity entity types
+        modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(l => new { l.LoginProvider, l.ProviderKey });
+        modelBuilder.Entity<IdentityUserToken<string>>().HasKey(t => new { t.UserId, t.LoginProvider, t.Name });
+        modelBuilder.Entity<IdentityUserRole<string>>().HasKey(r => new { r.UserId, r.RoleId });
+
+        modelBuilder.Entity<ApplicationUser>()
+              .Property(u => u.CreatedAt)
+              .HasDefaultValueSql("GETUTCDATE()");
+
         modelBuilder.Entity<Category>(entity =>
         {
             entity.Property(e => e.CategoryName)

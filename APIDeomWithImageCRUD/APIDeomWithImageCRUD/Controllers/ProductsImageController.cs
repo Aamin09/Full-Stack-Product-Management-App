@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using APIDeomWithImageCRUD.Data;
 
 namespace APIDeomWithImageCRUD.Controllers
 {
