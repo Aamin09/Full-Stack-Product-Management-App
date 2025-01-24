@@ -23,6 +23,21 @@
                 <li class="nav-item">
                     <a class="nav-link text-white px-3 py-2" href="/product-images">Product Images</a>
                 </li>
+               <!-- Check if the user is authenticated -->
+        <li *ngIf="!isAuthenticated" class="nav-item">
+            <a class="nav-link text-white px-3 py-2" href="/login">Login</a>
+          </li>
+          <li *ngIf="!isAuthenticated" class="nav-item">
+            <a class="nav-link text-white px-3 py-2" href="/register">Sign Up</a>
+          </li>
+  
+          <!-- Display username and logout if authenticated -->
+          <li *ngIf="isAuthenticated" class="nav-item">
+            <a class="nav-link text-white px-3 py-2" href="javascript:void(0)">{{ username }}</a>
+          </li>
+          <li *ngIf="isAuthenticated" class="nav-item">
+            <a class="nav-link text-white px-3 py-2" href="javascript:void(0)" (click)="logout()">Logout</a>
+          </li>
             </ul>
         </div>
     </div>

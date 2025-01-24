@@ -1,0 +1,184 @@
+/* General Styles */
+body {
+  background: linear-gradient(135deg, #6e7f80, #a7c5bd);
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Gradient Header Background for the Login Form */
+.header-gradient {
+  background: linear-gradient(90deg, #007bff, #00c6ff); /* Gradient from blue to light blue */
+  border-radius: 5px;
+  text-align: center;
+}
+
+/* Styling for the Header Text */
+h3 {
+  color: #fff;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0;
+  padding: -20px;
+  animation: headerAnimation 1s ease-in-out;
+}
+
+@keyframes headerAnimation {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Styling the Register Link */
+a.text-decoration-none {
+  color: #007bff;
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: color 0.3s;
+}
+
+a.text-decoration-none:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+/* Forgot Password Link */
+a.forgot-password {
+  color: #e74c3c;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+a.forgot-password:hover {
+  color: #c0392b;
+  text-decoration: underline;
+}
+
+/* Card Styling */
+.card {
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  background: #ffffff;
+  animation: slideInFromBottom 1s ease-out;
+  padding: 30px;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes slideInFromBottom {
+  0% {
+    transform: translateY(50%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Input Fields Styling */
+input.form-control {
+  border-radius: 25px;
+  padding: 12px 15px;
+  font-size: 1rem;
+  border: 2px solid #ccc;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Invalid Feedback */
+.invalid-feedback {
+  font-size: 0.9rem;
+  color: #e74c3c;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Submit Button Styling */
+.btn-primary {
+  border-radius: 25px;
+  font-size: 1.1rem;
+  padding: 14px 0;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* Remember Me Checkbox */
+.form-check-input {
+  border-radius: 50%;
+}
+
+.form-check-label {
+  font-size: 1rem;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .card {
+    padding: 20px;
+  }
+
+  .btn-primary {
+    padding: 12px 0;
+  }
+
+  input.form-control {
+    font-size: 0.95rem;
+  }
+
+  .form-check-label {
+    font-size: 0.9rem;
+  }
+}
+
+/* Ensure the container is fully responsive */
+.container {
+  max-width: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Mobile Specific */
+@media (max-width: 576px) {
+  .col-md-4 {
+    width: 100%;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+}

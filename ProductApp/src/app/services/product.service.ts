@@ -21,6 +21,13 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
+  private getHeaders():HttpHeaders{
+    const token=localStorage.getItem('access_token');
+    return new HttpHeaders({
+      Authorization:`Bearer ${token}`
+    });
+  }
+
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.apiUrl);
   }

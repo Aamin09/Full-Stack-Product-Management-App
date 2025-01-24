@@ -12,18 +12,23 @@ import { ProductImageListComponent } from './components/productImages/product-im
 import { ProductImageAddComponent } from './components/productImages/product-image-add/product-image-add.component';
 import { ProductImageEditComponent } from './components/productImages/product-image-edit/product-image-edit.component';
 import { ProductImageDetailsComponent } from './components/productImages/product-image-details/product-image-details.component';
+import { LoginComponent } from './auth/login/login.component';
+import { RegisterComponent } from './auth/register/register.component';
+import { AdminGuard } from './auth/role.guard';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/categories', pathMatch: 'full' },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  {path:'login',component:LoginComponent},
+  {path:'register',component:RegisterComponent},
   { path: 'categories', component: CategoryListComponent },
   { path: 'categories/add', component: CategoryAddComponent },
   { path: 'categories/edit/:id', component: CategoryEditComponent },
   { path: 'categories/details/:id', component: CategoryDetailsComponent },
-  { path: 'products', component:ProductListComponent },
-  { path: 'products/add', component: ProductAddComponent },
-  { path: 'products/edit/:id', component: ProductEditComponent },
-  { path: 'products/details/:id', component: ProductDetailsComponent },
+  { path: 'products', component:ProductListComponent ,canActivate:[AdminGuard]},
+  { path: 'products/add', component: ProductAddComponent ,canActivate:[AdminGuard]},
+  { path: 'products/edit/:id', component: ProductEditComponent,canActivate:[AdminGuard] },
+  { path: 'products/details/:id', component: ProductDetailsComponent,canActivate:[AdminGuard] },
   { path: 'product-images', component: ProductImageListComponent },
   { path: 'product-images/add', component: ProductImageAddComponent },
   { path: 'product-images/edit/:id', component: ProductImageEditComponent },
