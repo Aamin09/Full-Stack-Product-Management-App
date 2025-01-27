@@ -22,6 +22,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { AuthInterceptor } from './auth/auth.interceptors';
+import { EmailConfirmationComponent } from './auth/email-confirmation/email-confirmation.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { AuthInterceptor } from './auth/auth.interceptors';
     NavbarComponent,
     FooterComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    EmailConfirmationComponent
   ],
   imports: [
     BrowserModule,

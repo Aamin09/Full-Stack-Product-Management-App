@@ -3,6 +3,11 @@ export interface LoginDto {
     password:string;
 }
 
+export interface AuthStatus {
+  isLoggedIn: boolean;
+  username: string;
+}
+
 export interface RegisterDto{
     userName:string;
     email:string;
@@ -12,7 +17,7 @@ export interface RegisterDto{
     dateOfBirth:Date;
     address:string;
     password:string;
-    confirmPassword:string;
+    confirmPassword?: string;
 }
 
 export interface ForgotPasswordDto{

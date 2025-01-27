@@ -15,12 +15,14 @@ import { ProductImageDetailsComponent } from './components/productImages/product
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { AdminGuard } from './auth/role.guard';
+import { EmailConfirmationComponent } from './auth/email-confirmation/email-confirmation.component';
 
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   {path:'login',component:LoginComponent},
   {path:'register',component:RegisterComponent},
+  {path:'email-confirm',component:EmailConfirmationComponent},
   { path: 'categories', component: CategoryListComponent },
   { path: 'categories/add', component: CategoryAddComponent },
   { path: 'categories/edit/:id', component: CategoryEditComponent },

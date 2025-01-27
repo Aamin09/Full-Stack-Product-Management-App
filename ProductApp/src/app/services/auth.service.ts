@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ApiResponse, ForgotPasswordDto, LoginDto, RegisterDto } from '../interfaces/auth.models';
-import { Observable, tap } from 'rxjs';
+import { ApiResponse, AuthStatus, ForgotPasswordDto, LoginDto, RegisterDto } from '../interfaces/auth.models';
+import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 import moment from 'moment';
 import {jwtDecode  } from 'jwt-decode'; 
 
@@ -12,6 +12,8 @@ export class AuthService {
 
   private apiUrl='https://localhost:7271/api/Auth';
 
+  private authChangeSubject = new Subject<void>();
+  authChanged = this.authChangeSubject.asObservable();
   constructor(private http:HttpClient) { }
 
   login(crediential:LoginDto):Observable<ApiResponse>{
@@ -19,6 +21,9 @@ export class AuthService {
       tap(response => {
         if (response && response.token) {
           this.setSession(response);
+          this.updateAuthStatus();
+          // Emit authentication change
+          this.authChangeSubject.next();
         }
       })
     );;
@@ -37,10 +42,17 @@ export class AuthService {
   }
 
   confirmEmail(userId:string,token:string):Observable<ApiResponse>{
-    return this.http.post<ApiResponse>(`${this.apiUrl}/confirm-email`,{userId,token});
+    return this.http.post<ApiResponse>(`${this.apiUrl}/confirm-email`, { userId, token }, 
+      { headers: { 'Content-Type': 'application/json' } });
   }
 
+  resendEmailConfirmation(userId:string):Observable<ApiResponse>{
+    return this.http.post<ApiResponse>(`${this.apiUrl}/resend-email-confirmation`, { userId }, 
+      { headers: { 'Content-Type': 'application/json' } });
+  }
   logout():Observable<ApiResponse>{
+    this.logoutClientSide();
+    this.updateAuthStatus();
     return this.http.post<ApiResponse>(`${this.apiUrl}/logout`, {});
   }
    setSession(authResult:ApiResponse):void{
@@ -92,9 +104,38 @@ isAdmin(): boolean {
 }
 
 
+private getCurrentUsername(): string {
+  const token = this.getToken();
+  if (token) {
+    const decodedToken: any = jwtDecode(token);
+    return decodedToken?.unique_name || 
+           decodedToken?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || '';
+  }
+  return '';
+}
+
+
+  // BehaviorSubject to track auth status across app
+  private authStatusSubject = new BehaviorSubject<AuthStatus>({
+    isLoggedIn: this.isLoggedIn(),
+    username: this.getCurrentUsername()
+  });
+  
+  currentAuthStatus = this.authStatusSubject.asObservable();
+
+ // Method to update auth status
+ private updateAuthStatus(): void {
+  this.authStatusSubject.next({
+    isLoggedIn: this.isLoggedIn(),
+    username: this.getCurrentUsername()
+  });
+}
+
+
   logoutClientSide(): void {
     localStorage.removeItem('access_token');
     localStorage.removeItem('expires_at');
+    this.authChangeSubject.next();
   }
 }
 

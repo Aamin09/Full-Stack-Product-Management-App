@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { jwtDecode } from 'jwt-decode';
-import { Router } from '@angular/router'; // Add Router import
+import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -9,41 +9,24 @@ import { Router } from '@angular/router'; // Add Router import
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent implements OnInit {
-  isAuthenticated: boolean = false;
-  username: string = '';
+  isAuthenticated = false;
+  username = '';
 
   constructor(
-    private authService: AuthService, 
-    private router: Router // Inject Router
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    // Check authentication status on component initialization
-    this.checkAuthStatus();
-  }
-
-  // Method to check and update authentication status
-  checkAuthStatus(): void {
-    this.isAuthenticated = this.authService.isLoggedIn();
-    if (this.isAuthenticated) {
-      this.username = this.getUsernameFromToken();
-    } else {
-      this.username = '';
-    }
-  }
-
-  getUsernameFromToken(): string {
-    const token = this.authService.getToken();
-    if (token) {
-      const decodedToken: any = jwtDecode(token);
-      return decodedToken?.unique_name || '';
-    }
-    return '';
+    // Use BehaviorSubject in AuthService for immediate update
+    this.authService.currentAuthStatus.subscribe(status => {
+      this.isAuthenticated = status.isLoggedIn;
+      this.username = status.username;
+    });
   }
 
   logout() {
-    this.authService.logoutClientSide();
-    this.checkAuthStatus(); // Update status after logout
-    this.router.navigate(['/login']); // Redirect to login page
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

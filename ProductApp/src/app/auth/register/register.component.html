@@ -1,1 +1,119 @@
-<p>register works!</p>
+<div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+        <div class="col-md-6 col-sm-8 col-12">
+            <div class="card shadow-lg p-4 rounded">
+                <div class="text-center mb-4">
+                    <h3 class="font-weight-bold header-gradient text-uppercase text-white p-3">Sign Up</h3>
+                    <h4 class="font-weight-bold p-3">Welcome!</h4>
+                    <p class="text-muted">Register your account</p>
+                </div>
+
+                <form [formGroup]="registerForm" (ngSubmit)="register()">
+
+                    <div class="form-group">
+                        <label for="userName" class="form-label">Username</label>
+                        <input type="text" id="userName" placeholder="Enter your username" formControlName="userName" [class.is-invalid]="f['userName'].touched && f['userName'].invalid" class="form-control">
+                        <div class="invalid-feedback d-block" *ngIf="f['userName'].touched && f['userName'].invalid" >
+                            <div *ngIf="f['userName'].errors?.['required']">Username is required</div>
+                            <div *ngIf="f['userName'].errors?.['minlength']">Username must be atleast 3 characters</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="firstName" class="form-label">First Name</label>
+                        <input type="text" id="firstName" placeholder="Enter your firstname" formControlName="firstName" [class.is-invalid]="f['firstName'].touched && f['firstName'].invalid" class="form-control">
+                        <div class="invalid-feedback d-block" *ngIf="f['firstName'].touched && f['firstName'].invalid" >
+                            <div *ngIf="f['firstName'].errors?.['required']">First name is required</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName" class="form-label">Last Name</label>
+                        <input type="text" id="lastName" placeholder="Enter your lastname" formControlName="lastName" [class.is-invalid]="f['lastName'].touched && f['lastName'].invalid" class="form-control">
+                        <div class="invalid-feedback d-block" *ngIf="f['lastName'].touched && f['lastName'].invalid" >
+                            <div *ngIf="f['lastName'].errors?.['required']">Last name is required</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" placeholder="Enter your email" formControlName="email" [class.is-invalid]="f['email'].touched && f['email'].invalid" class="form-control">
+                        <div class="invalid-feedback d-block" *ngIf="f['email'].touched && f['email'].invalid" >
+                            <div *ngIf="f['email'].errors?.['required']">Email is required</div>
+                            <div *ngIf="f['email'].errors?.['pattern']">Invalid email address</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gender" class="form-label">Gender</label>
+                        <div class="d-flex gap-3" style="padding-left: 15px;">
+                          <div class="form-check">
+                            <input type="radio" id="male" formControlName="gender" value="Male" 
+                              class="form-check-input" [class.is-invalid]="f['gender'].touched && f['gender'].invalid" >
+                            <label class="form-check-label" for="male">Male</label>
+                          </div>
+                          <div class="form-check">
+                            <input type="radio" id="female" formControlName="gender" value="Female" 
+                              class="form-check-input" [class.is-invalid]="f['gender'].touched && f['gender'].invalid" >
+                            <label class="form-check-label" for="female">Female</label>
+                          </div>
+                        </div>
+                        <div class="invalid-feedback d-block" *ngIf="f['gender'].touched && f['gender'].invalid">
+                          <div *ngIf="f['gender'].errors?.['required']">Gender is required</div>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label for="dateOfBirth" class="form-label">Date of Birth</label>
+                        <input type="date" id="dateOfBirth" formControlName="dateOfBirth" [class.is-invalid]="f['dateOfBirth'].touched && f['dateOfBirth'].invalid" class="form-control">
+                        <div class="invalid-feedback d-block" *ngIf="f['dateOfBirth'].touched && f['dateOfBirth'].invalid" >
+                            <div *ngIf="f['dateOfBirth'].errors?.['required']">Date of Birth is required</div>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="address" class="form-label">Address</label>
+                        <textarea  id="address" formControlName="address" rows="4" [class.is-invalid]="f['address'].touched && f['address'].invalid" class="form-control"></textarea>
+                        <div class="invalid-feedback d-block" *ngIf="f['address'].touched && f['address'].invalid" >
+                            <div *ngIf="f['address'].errors?.['required']">Date of Birth is required</div>
+                        </div>
+                      </div>
+
+
+                      <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" id="password" placeholder="Enter your password" formControlName="password" [class.is-invalid]="f['password'].touched && f['password'].invalid" class="form-control">
+                        <div class="invalid-feedback d-block" *ngIf="f['password'].touched && f['password'].invalid" >
+                            <div *ngIf="f['password'].errors?.['required']">Password is required</div>
+                            <div *ngIf="f['password'].errors?.['pattern']">Password must be strong</div>
+                            <div *ngIf="f['password'].errors?.['minlength']">Password must be at least 8 characters long</div>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <input type="password" id="password" placeholder="Enter your confirm password" formControlName="confirmPassword" [class.is-invalid]="f['confirmPassword'].touched && f['confirmPassword'].invalid" class="form-control">
+                        <div class="invalid-feedback d-block" *ngIf="f['confirmPassword'].touched && f['confirmPassword'].invalid" >
+                            <div *ngIf="f['confirmPassword'].errors?.['required']">Password is required</div>
+                            <div *ngIf="f['confirmPassword'].errors?.['passwordMismatch']">Passwords must match</div>
+                        </div>
+                      </div>
+
+                      <div class="d-grid mt-3">
+                        <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid">Sign Up
+                            <svg class="arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+                                <line x1="5" y1="25" x2="25" y2="5" stroke="black" stroke-width="2" />
+                                <polyline points="10,5 25,5 25,20" fill="none" stroke="black" stroke-width="2" />
+                              </svg>
+                        </button>
+                      </div>
+                    
+                      <div class="mt-3">
+                        <a href="/login" class="text-decoration-none">Alreday Register? Click here to login</a>
+                      </div>
+                      
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

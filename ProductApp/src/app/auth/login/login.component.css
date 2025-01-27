@@ -6,6 +6,12 @@ body {
   padding: 0;
 }
 
+.invalid-feedback{
+  padding-left: 10px;
+}
+.form-group{
+  margin-bottom: 12px;
+}
 /* Gradient Header Background for the Login Form */
 .header-gradient {
   background: linear-gradient(90deg, #007bff, #00c6ff); /* Gradient from blue to light blue */
@@ -47,6 +53,7 @@ a.text-decoration-none:hover {
   color: #0056b3;
   text-decoration: underline;
 }
+
 
 /* Forgot Password Link */
 a.forgot-password {
@@ -95,6 +102,9 @@ input.form-control {
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
+label{
+  padding-left: 8px;
+}
 input.form-control:focus {
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
