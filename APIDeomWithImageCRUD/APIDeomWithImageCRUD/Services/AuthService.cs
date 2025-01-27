@@ -1,7 +1,9 @@
 ﻿using APIDeomWithImageCRUD.DTOs;
 using APIDeomWithImageCRUD.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Bcpg.OpenPgp;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -17,8 +19,9 @@ namespace APIDeomWithImageCRUD.Services
         private readonly EmailService emailService;
         private readonly ILogger<AuthService> logger;
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IDistributedCache cache;
 
-        public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, EmailService emailService, ILogger<AuthService> logger, IHttpContextAccessor httpContextAccessor)
+        public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, EmailService emailService, ILogger<AuthService> logger, IHttpContextAccessor httpContextAccessor, IDistributedCache cache)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -27,55 +30,7 @@ namespace APIDeomWithImageCRUD.Services
             this.emailService = emailService;
             this.logger = logger;
             this.httpContextAccessor = httpContextAccessor;
-        }
-
-        public async Task<ResponseDto> ConfirmEmailAsync(string userId, string token)
-        {
-            var user= await userManager.FindByIdAsync(userId);
-            if(user == null)
-            {
-                return new ResponseDto { IsSuccess = false, Message = "User not found" };
-            }
-            var decodedToken=Uri.UnescapeDataString(token); 
-
-            // confirm email
-            var result=await userManager.ConfirmEmailAsync(user,decodedToken);
-
-            return result.Succeeded
-                ? new ResponseDto { IsSuccess = true, Message = "Email confirmed successfully" }
-                : new ResponseDto { IsSuccess = false, Message = string.Join(",", result.Errors.Select(e => e.Description)) };
-
-            throw new NotImplementedException();
-        }
-
-        public async Task<ResponseDto> ForgotPasswordAsync(ForgotPasswordDto model)
-        {
-            var user = await userManager.FindByEmailAsync(model.Email);
-            if (user == null)
-                return new ResponseDto { IsSuccess = false, Message = "No user found with this email" };
-
-            //generate password reset token
-            var token=await userManager.GeneratePasswordResetTokenAsync(user);
-            var encodedToken=Uri.EscapeDataString(token);
-
-            // reset password link code
-            var resetLink = $"{configuration["AppSettings:ClientUrl"]}/confirm-email" +
-                   $"?userId={Uri.EscapeDataString(user.Id)}" +
-                   $"&token={encodedToken}";
-
-            // send email for reset code
-            await emailService.SendEmailAsync(
-                user.Email,
-                "Password Reset",
-                $"Click the link to reset your password: {resetLink}"
-                );
-
-            return new ResponseDto
-            {
-                IsSuccess = true,
-                Message = "Password reset link sent"
-            };
-            throw new NotImplementedException();
+            this.cache = cache;
         }
 
         public async Task<ResponseDto> LoginAsync(LoginDto model)
@@ -107,8 +62,8 @@ namespace APIDeomWithImageCRUD.Services
 
 
             // Generate Jwt Token
-            var roles=await userManager.GetRolesAsync(user);    
-            var token=GenerateJwtToken(user,roles);
+            var roles = await userManager.GetRolesAsync(user);
+            var token = GenerateJwtToken(user, roles);
             return new ResponseDto
             {
                 IsSuccess = true,
@@ -122,7 +77,7 @@ namespace APIDeomWithImageCRUD.Services
         {
             try
             {
-               
+
                 var user = await userManager.GetUserAsync(httpContextAccessor.HttpContext.User);
                 if (user == null)
                 {
@@ -133,7 +88,7 @@ namespace APIDeomWithImageCRUD.Services
                     };
                 }
 
-             
+
                 return new ResponseDto
                 {
                     IsSuccess = true,
@@ -149,12 +104,13 @@ namespace APIDeomWithImageCRUD.Services
                 };
             }
         }
-        
-    
+
+
 
         public async Task<ResponseDto> RegisterAsync(RegisterDto model)
         {
-            if(await userManager.FindByNameAsync(model.Username) != null){
+            if (await userManager.FindByNameAsync(model.Username) != null)
+            {
                 return new ResponseDto
                 {
                     IsSuccess = false,
@@ -181,7 +137,7 @@ namespace APIDeomWithImageCRUD.Services
                 Address = model.Address,
             };
 
-            var result=await userManager.CreateAsync(user,model.Password);
+            var result = await userManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
                 return new ResponseDto { IsSuccess = false, Message = string.Join(",", result.Errors.Select(e => e.Description)) };
@@ -189,23 +145,115 @@ namespace APIDeomWithImageCRUD.Services
             // Default user role assignment
             await userManager.AddToRoleAsync(user, "User");
 
-            // email confirmation code
-            var confirmEmailToken = await userManager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmLink = $"{configuration["AppSettings:ClientUrl"]}/confirm-email" +
-                   $"?userId={Uri.EscapeDataString(user.Id)}" +
-                   $"&token={Uri.EscapeDataString(confirmEmailToken)}";
-
-            await emailService.SendEmailAsync(user.Email, "Confirm Your Account", $"Click to confirm: {confirmLink}");
-
+            // email sending and token code 
+            await GenerateAndSendConfirmationToken(user);
+          
             // generate jwt token
-            var roles=await userManager.GetRolesAsync(user); 
-            var jwtToken=GenerateJwtToken(user,roles);
+            var roles = await userManager.GetRolesAsync(user);
+            var jwtToken = GenerateJwtToken(user, roles);
 
             return new ResponseDto
             {
                 IsSuccess = true,
-                Message = "User registered successfully",
+                Message = "User registered successfully. Please check your email to confirm your account.",
                 Token = jwtToken
+            };
+
+        }
+
+        public async Task<ResponseDto> GenerateAndSendConfirmationToken(ApplicationUser user)
+        {
+            // Generate a new token (Base64 encoded or custom encoding as required)
+            var token = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+
+            // Cache token with a 5-minute expiration
+            var cacheOptions = new DistributedCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
+
+            await cache.SetStringAsync(
+                $"confirm_token_{user.Id}",
+                token,
+                cacheOptions
+            );
+
+            // Generate the confirmation link
+            var confirmLink = $"{configuration["AppSettings:ClientUrl"]}/email-confirm" +
+                              $"?userId={Uri.EscapeDataString(user.Id)}" +
+                              $"&token={Uri.EscapeDataString(token)}";
+
+            // Send the email
+            await emailService.SendEmailAsync(user.Email, "Confirm Your Account",
+                $"Click the following link to confirm your account: <a href='{confirmLink}' style='text-decoration: none; color: blue;'>Confirm Email</a>");
+
+            return new ResponseDto
+            {
+                IsSuccess = true,
+                Message = "Confirmation token generated and sent"
+            };
+        }
+
+        public async Task<ResponseDto> ConfirmEmailAsync(string userId, string token)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return new ResponseDto { IsSuccess = false, Message = "User not found" };
+            }
+
+            // Retrieve the cached token
+            var cachedToken = await cache.GetStringAsync($"confirm_token_{userId}");
+
+            // Decode the incoming token and compare it with the cached token
+            var decodedToken = Uri.UnescapeDataString(token);
+            if (cachedToken == null || cachedToken != decodedToken)
+            {
+                // Regenerate and send a new token
+                await GenerateAndSendConfirmationToken(user);
+                return new ResponseDto
+                {
+                    IsSuccess = false,
+                    Message = "Token expired. A new confirmation link has been sent. Please check your email."
+                };
+            }
+
+            // Remove the used token from cache
+            await cache.RemoveAsync($"confirm_token_{userId}");
+
+            // Confirm the email
+            var emailConfirmationToken = await userManager.GenerateEmailConfirmationTokenAsync(user);
+            var result = await userManager.ConfirmEmailAsync(user, emailConfirmationToken);
+
+            return result.Succeeded
+                ? new ResponseDto { IsSuccess = true, Message = "Email confirmed successfully" }
+                : new ResponseDto { IsSuccess = false, Message = string.Join(",", result.Errors.Select(e => e.Description)) };
+        }
+
+        public async Task<ResponseDto> ForgotPasswordAsync(ForgotPasswordDto model)
+        {
+            var user = await userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+                return new ResponseDto { IsSuccess = false, Message = "No user found with this email" };
+
+            //generate password reset token
+            var token=await userManager.GeneratePasswordResetTokenAsync(user);
+            var encodedToken=Uri.EscapeDataString(token);
+
+            // reset password link code
+            var resetLink = $"{configuration["AppSettings:ClientUrl"]}/confirm-email" +
+                   $"?userId={Uri.EscapeDataString(user.Id)}" +
+                   $"&token={encodedToken}";
+
+            // send email for reset code
+            await emailService.SendEmailAsync(
+                user.Email,
+                "Password Reset",
+                $"Click the link to reset your password: {resetLink}"
+                );
+
+            return new ResponseDto
+            {
+                IsSuccess = true,
+                Message = "Password reset link sent"
             };
             throw new NotImplementedException();
         }
@@ -256,5 +304,7 @@ namespace APIDeomWithImageCRUD.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+     
     }
 }

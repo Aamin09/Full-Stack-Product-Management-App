@@ -1,4 +1,5 @@
 ﻿using APIDeomWithImageCRUD.DTOs;
+using APIDeomWithImageCRUD.Models;
 
 namespace APIDeomWithImageCRUD.Services
 {
@@ -9,6 +10,8 @@ namespace APIDeomWithImageCRUD.Services
         Task<ResponseDto> ForgotPasswordAsync(ForgotPasswordDto model);
         Task<ResponseDto> ResetPasswordAsync(ResetPasswordDto model);
         Task<ResponseDto> ConfirmEmailAsync(string userId, string token);
+        Task<ResponseDto> GenerateAndSendConfirmationToken(ApplicationUser user);
+
         Task<ResponseDto> LogoutAsync();
 
     }

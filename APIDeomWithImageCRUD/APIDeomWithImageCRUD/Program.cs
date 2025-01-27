@@ -69,12 +69,14 @@ builder.Services.AddAuthentication(option =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<EmailService>();
 
+builder.Services.AddDistributedMemoryCache();
+
 // Configure CORS for Angular app
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", policy =>
     {
-        policy.WithOrigins("http://localhost:4200") // Angular app URL
+        policy.WithOrigins("your-angular-app-url") // Angular app URL
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -126,19 +128,6 @@ var app = builder.Build();
 
 
 
-using (var scope = app.Services.CreateScope())
-{
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-
-
-    if (!await roleManager.RoleExistsAsync("Admin"))
-        await roleManager.CreateAsync(new IdentityRole("Admin"));
-
-    if (!await roleManager.RoleExistsAsync("User"))
-        await roleManager.CreateAsync(new IdentityRole("User"));
-    
-}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
