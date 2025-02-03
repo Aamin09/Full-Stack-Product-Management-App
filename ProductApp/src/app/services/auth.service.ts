@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ApiResponse, AuthStatus, ForgotPasswordDto, LoginDto, RegisterDto } from '../interfaces/auth.models';
-import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
+import { ApiResponse, AuthStatus, ForgotPasswordDto, LoginDto, RegisterDto, ResetPasswordDto } from '../interfaces/auth.models';
+import { BehaviorSubject, catchError, Observable, Subject, tap } from 'rxjs';
 import moment from 'moment';
 import {jwtDecode  } from 'jwt-decode'; 
 
@@ -37,8 +37,8 @@ export class AuthService {
     return this.http.post<ApiResponse>(`${this.apiUrl}/forgot-password`,email);
   }
 
-  resetPassword(resetData:RegisterDto):Observable<ApiResponse>{
-    return this.http.post<ApiResponse>(`${this.apiUrl}/reset-password`,resetData);
+  resetPassword(resetData:ResetPasswordDto): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.apiUrl}/reset-password`, resetData);
   }
 
   confirmEmail(userId:string,token:string):Observable<ApiResponse>{

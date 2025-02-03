@@ -23,6 +23,8 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { AuthInterceptor } from './auth/auth.interceptors';
 import { EmailConfirmationComponent } from './auth/email-confirmation/email-confirmation.component';
+import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,9 @@ import { EmailConfirmationComponent } from './auth/email-confirmation/email-conf
     FooterComponent,
     LoginComponent,
     RegisterComponent,
-    EmailConfirmationComponent
+    EmailConfirmationComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,

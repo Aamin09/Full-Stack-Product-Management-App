@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row justify-content-center align-items-center min-vh-100">
-        <div class="col-md-6 col-sm-8 col-12">
+        <div class="col-ld-6 col-md-6 col-sm-8 col-12">
             <div class="card shadow-lg p-4 rounded">
                 <div class="text-center mb-4">
                     <h3 class="font-weight-bold header-gradient text-uppercase text-white p-3">Sign Up</h3>
@@ -75,7 +75,7 @@
                         <label for="address" class="form-label">Address</label>
                         <textarea  id="address" formControlName="address" rows="4" [class.is-invalid]="f['address'].touched && f['address'].invalid" class="form-control"></textarea>
                         <div class="invalid-feedback d-block" *ngIf="f['address'].touched && f['address'].invalid" >
-                            <div *ngIf="f['address'].errors?.['required']">Date of Birth is required</div>
+                            <div *ngIf="f['address'].errors?.['required']">Address is required</div>
                         </div>
                       </div>
 

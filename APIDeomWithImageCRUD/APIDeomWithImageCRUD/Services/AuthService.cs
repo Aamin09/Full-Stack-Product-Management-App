@@ -5,6 +5,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.IdentityModel.Tokens;
 using Org.BouncyCastle.Bcpg.OpenPgp;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 
@@ -164,7 +165,7 @@ namespace APIDeomWithImageCRUD.Services
         public async Task<ResponseDto> GenerateAndSendConfirmationToken(ApplicationUser user)
         {
             // Generate a new token (Base64 encoded or custom encoding as required)
-            var token = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+            var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
 
             // Cache token with a 5-minute expiration
             var cacheOptions = new DistributedCacheEntryOptions()
@@ -178,8 +179,8 @@ namespace APIDeomWithImageCRUD.Services
 
             // Generate the confirmation link
             var confirmLink = $"{configuration["AppSettings:ClientUrl"]}/email-confirm" +
-                              $"?userId={Uri.EscapeDataString(user.Id)}" +
-                              $"&token={Uri.EscapeDataString(token)}";
+                              $"?userId={WebUtility.UrlEncode(user.Id)}" +
+                              $"&token={WebUtility.UrlEncode(token)}";
 
             // Send the email
             await emailService.SendEmailAsync(user.Email, "Confirm Your Account",
@@ -204,7 +205,7 @@ namespace APIDeomWithImageCRUD.Services
             var cachedToken = await cache.GetStringAsync($"confirm_token_{userId}");
 
             // Decode the incoming token and compare it with the cached token
-            var decodedToken = Uri.UnescapeDataString(token);
+            var decodedToken = WebUtility.UrlDecode(token);
             if (cachedToken == null || cachedToken != decodedToken)
             {
                 // Regenerate and send a new token
@@ -234,28 +235,27 @@ namespace APIDeomWithImageCRUD.Services
             if (user == null)
                 return new ResponseDto { IsSuccess = false, Message = "No user found with this email" };
 
-            //generate password reset token
-            var token=await userManager.GeneratePasswordResetTokenAsync(user);
-            var encodedToken=Uri.EscapeDataString(token);
+            // Generate password reset token
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+            var encodedToken = WebUtility.UrlEncode(token);
 
-            // reset password link code
-            var resetLink = $"{configuration["AppSettings:ClientUrl"]}/confirm-email" +
-                   $"?userId={Uri.EscapeDataString(user.Id)}" +
+            // Reset password link code
+            var resetLink = $"{configuration["AppSettings:ClientUrl"]}/reset-password" +
+                   $"?email={WebUtility.UrlEncode(user.Email)}" +
                    $"&token={encodedToken}";
 
-            // send email for reset code
+            // Send email for reset code
             await emailService.SendEmailAsync(
                 user.Email,
                 "Password Reset",
-                $"Click the link to reset your password: {resetLink}"
-                );
+                $"Click the link to reset your password: <a href='{resetLink}' style='text-decoration:none;color:blue;'>Reset Password</a>"
+            );
 
             return new ResponseDto
             {
                 IsSuccess = true,
                 Message = "Password reset link sent"
             };
-            throw new NotImplementedException();
         }
 
         public async Task<ResponseDto> ResetPasswordAsync(ResetPasswordDto model)
@@ -264,18 +264,28 @@ namespace APIDeomWithImageCRUD.Services
             if (user == null)
                 return new ResponseDto { IsSuccess = false, Message = "User not found" };
 
-            var decodedToken=Uri.UnescapeDataString(model.Token);
-            // Reset Password
-            var result = await userManager.ResetPasswordAsync(user, decodedToken, model.NewPassword);
-            return result.Succeeded
-                ? new ResponseDto { IsSuccess=true,Message="Password reset successful"}
-                : new ResponseDto
+            var decodedToken = Uri.UnescapeDataString(model.Token);
+
+            try
+            {
+                // Reset Password
+                var result = await userManager.ResetPasswordAsync(user, decodedToken, model.NewPassword);
+                return result.Succeeded
+                    ? new ResponseDto { IsSuccess = true, Message = "Password reset successful" }
+                    : new ResponseDto
+                    {
+                        IsSuccess = false,
+                        Message = string.Join(",", result.Errors.Select(e => e.Description))
+                    };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDto
                 {
                     IsSuccess = false,
-                    Message = string.Join(",", result.Errors.Select(e => e.Description))
+                    Message = "Invalid or expired reset token. Please request a new password reset link."
                 };
-
-            throw new NotImplementedException();
+            }
         }
 
         private string GenerateJwtToken(ApplicationUser user, IList<string> roles)

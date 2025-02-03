@@ -28,7 +28,7 @@ export interface ResetPasswordDto{
     email: string;
     token: string;
     newPassword: string;
-    confirmNewPassword: string;
+    
 }
 
 export interface ApiResponse<T = any> {

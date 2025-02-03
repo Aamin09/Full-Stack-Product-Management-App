@@ -82,7 +82,7 @@ export class EmailConfirmationComponent implements OnInit {
   handleInvalidLink(): void {
     this.isLoading = false;
     this.confirmationMessage =
-      'Invalid or missing confirmation link. Please check your email or request a new confirmation.\nYour email confirmation time is 5 minutes ';
+      'Invalid or missing confirmation link. Please check your email or request a new confirmation.\nYour email confirmation time is 5 minutes';
   }
   navigateToRegister(){
     this.router.navigate(['/register']);
