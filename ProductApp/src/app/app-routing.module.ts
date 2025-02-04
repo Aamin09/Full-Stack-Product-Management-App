@@ -18,6 +18,7 @@ import { AdminGuard } from './auth/role.guard';
 import { EmailConfirmationComponent } from './auth/email-confirmation/email-confirmation.component';
 import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
+import { HomeComponent } from './components/home/home.component';
 
 
 const routes: Routes = [
@@ -27,18 +28,19 @@ const routes: Routes = [
   {path:'forgot-Pass',component:ForgotPasswordComponent},
   {path:'reset-password',component:ResetPasswordComponent},
   {path:'email-confirm',component:EmailConfirmationComponent},
-  { path: 'categories', component: CategoryListComponent },
-  { path: 'categories/add', component: CategoryAddComponent },
-  { path: 'categories/edit/:id', component: CategoryEditComponent },
-  { path: 'categories/details/:id', component: CategoryDetailsComponent },
+  {path:'home',component:HomeComponent},
+  { path: 'categories', component: CategoryListComponent ,canActivate:[AdminGuard]},
+  { path: 'categories/add', component: CategoryAddComponent ,canActivate:[AdminGuard] },
+  { path: 'categories/edit/:id', component: CategoryEditComponent ,canActivate:[AdminGuard] },
+  { path: 'categories/details/:id', component: CategoryDetailsComponent ,canActivate:[AdminGuard] },
   { path: 'products', component:ProductListComponent ,canActivate:[AdminGuard]},
   { path: 'products/add', component: ProductAddComponent ,canActivate:[AdminGuard]},
   { path: 'products/edit/:id', component: ProductEditComponent,canActivate:[AdminGuard] },
   { path: 'products/details/:id', component: ProductDetailsComponent,canActivate:[AdminGuard] },
-  { path: 'product-images', component: ProductImageListComponent },
-  { path: 'product-images/add', component: ProductImageAddComponent },
-  { path: 'product-images/edit/:id', component: ProductImageEditComponent },
-  { path: 'product-images/details/:id', component: ProductImageDetailsComponent },
+  { path: 'product-images', component: ProductImageListComponent ,canActivate:[AdminGuard] },
+  { path: 'product-images/add', component: ProductImageAddComponent ,canActivate:[AdminGuard] },
+  { path: 'product-images/edit/:id', component: ProductImageEditComponent ,canActivate:[AdminGuard] },
+  { path: 'product-images/details/:id', component: ProductImageDetailsComponent ,canActivate:[AdminGuard] },
 
 ];
 
