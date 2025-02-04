@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
       next: (res) => {
         if (res.isSuccess) {
           this.authService.setSession(res);
-          this.router.navigate(['/categories']);
+          this.router.navigate(['/home']);
         } else {
           alert(res.message || 'Login failed');
         }
