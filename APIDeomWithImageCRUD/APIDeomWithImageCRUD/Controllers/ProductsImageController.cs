@@ -6,12 +6,14 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using APIDeomWithImageCRUD.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace APIDeomWithImageCRUD.Controllers
 {
     // Controller to manage product images (Upload, Edit, Delete, and Show Existing)
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductsImageController : ControllerBase
     {
         private readonly ProductsApiContext _context;

@@ -5,11 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using APIDeomWithImageCRUD.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace APIDeomWithImageCRUD.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CategoriesController : ControllerBase
     {
         private readonly ProductsApiContext _context;
