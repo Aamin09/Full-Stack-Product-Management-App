@@ -26,7 +26,7 @@ export class AuthService {
           this.authChangeSubject.next();
         }
       })
-    );;
+    );
   }
 
   register(userData:RegisterDto):Observable<ApiResponse>{
